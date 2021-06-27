@@ -26,13 +26,14 @@ namespace VGA {
 
     static const size_t WIDTH = 80;
     static const size_t HEIGHT = 25;
+    static const int BUFFER_ADDR = 0xB8000;
 
-    static inline uint8_t vgaEntryColor(vga_color fg, vga_color bg) 
+    static inline uint8_t entryColor(vga_color fg, vga_color bg) 
     {
         return fg | bg << 4;
     }
 
-    static inline uint16_t vgaEntry(unsigned char uc, uint8_t color) 
+    static inline uint16_t entry(unsigned char uc, uint8_t color) 
     {
         return (uint16_t) uc | (uint16_t) color << 8;
     }
