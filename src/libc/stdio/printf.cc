@@ -1,16 +1,13 @@
 #include "stdio.h"
 
 static bool print(const char* data, size_t length) {
-    Terminal terminal;
-    terminal.init();
-
 	const unsigned char* bytes = (const unsigned char*) data;
 	for (size_t i = 0; i < length; i++) {
         if ((char)bytes[i] == EOF) {
             return false;
         }
 
-        terminal.writeChar(bytes[i]);
+        Terminal::get().writeChar(bytes[i]);
     }
 
 	return true;

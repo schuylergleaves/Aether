@@ -1,18 +1,27 @@
 #include "terminal.h"
 
-void Terminal::init() 
-{
-    this->row = 0;
-    this->col = 0;
-    this->color = VGA::entryColor(VGA::VGA_COLOR_GREEN, VGA::VGA_COLOR_BLACK);
+static Terminal terminal;
 
-    this->buffer = (uint16_t*) VGA::BUFFER_ADDR;
+Terminal::Terminal() {
+    row = 0;
+    col = 0;
+    color = VGA::entryColor(VGA::VGA_COLOR_GREEN, VGA::VGA_COLOR_BLACK);
+
+    buffer = (uint16_t*) VGA::BUFFER_ADDR;
     for (size_t y = 0; y < VGA::HEIGHT; y++) {
         for (size_t x = 0; x < VGA::WIDTH; x++) {
             const size_t index = y * VGA::WIDTH + x;
-            buffer[index] = VGA::entry(' ', this->color);
+            buffer[index] = VGA::entry(' ', color);
         }
     }
+}
+
+void Terminal::init() {
+    terminal = Terminal();
+}
+
+Terminal& Terminal::get() {
+    return terminal;
 }
 
 void Terminal::writeString(const char* data) 
@@ -23,7 +32,7 @@ void Terminal::writeString(const char* data)
 }
 
 void Terminal::writeChar(const char c) {
-    putEntryAt(c, this->color, this->col, this->row);
+    putEntryAt(c, color, col, row);
 }
 
 void Terminal::setColor(uint8_t newColor) 

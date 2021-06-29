@@ -8,10 +8,17 @@
 
 class Terminal {
 public:
-    void init();
+    static void init();
+    static Terminal& get();
+
     void writeString(const char* data);
     void writeChar(const char c);
     void setColor(uint8_t newColor);
+
+    Terminal();
+
+protected:
+
 
 private:
     size_t row;
