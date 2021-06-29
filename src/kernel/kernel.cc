@@ -2,7 +2,12 @@
 
 extern "C" void kernel_main(void){
     Terminal::init();
-    printf("Hello Printf!");
-    printf("Hello Printf!");
-    printf("Hello Printf!");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
+    printf("Hello Singleton Test\n");
 }

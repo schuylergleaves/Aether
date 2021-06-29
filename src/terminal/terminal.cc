@@ -24,8 +24,7 @@ Terminal& Terminal::get() {
     return terminal;
 }
 
-void Terminal::writeString(const char* data) 
-{
+void Terminal::writeString(const char* data) {
     for (size_t i = 0; i < strlen(data); i++) {
         writeChar(data[i]);
     }
@@ -35,13 +34,11 @@ void Terminal::writeChar(const char c) {
     putEntryAt(c, color, col, row);
 }
 
-void Terminal::setColor(uint8_t newColor) 
-{
+void Terminal::setColor(uint8_t newColor) {
     color = newColor;
 }
 
-void Terminal::putEntryAt(char c, uint8_t color, size_t x, size_t y) 
-{
+void Terminal::putEntryAt(char c, uint8_t color, size_t x, size_t y) {
     switch (c) {
         // For line break we want to push col to the end so
         // it wraps over.
