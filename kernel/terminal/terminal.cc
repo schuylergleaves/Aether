@@ -4,17 +4,18 @@ static Terminal terminal;
 
 void Terminal::init() {
     terminal.init_();
+    terminal.writeString("Terminal Initialized!\n");
 }
 
 void Terminal::init_() {
-    row = 0;
-    col = 0;
-    color = VGA::entryColor(VGA::VGA_COLOR_GREEN, VGA::VGA_COLOR_BLACK);
+    this->row = 0;
+    this->col = 0;
+    this->color = VGA::entryColor(VGA::VGA_COLOR_GREEN, VGA::VGA_COLOR_BLACK);
 
-    buffer = (uint16_t*) VGA::BUFFER_ADDR;
-    for (size_t y = 0; y < VGA::HEIGHT; y++) {
-        for (size_t x = 0; x < VGA::WIDTH; x++) {
-            const size_t index = y * VGA::WIDTH + x;
+    this->buffer = (uint16_t*) VGA::BUFFER_ADDR;
+    for (size_t i = 0; i < VGA::HEIGHT; i++) {
+        for (size_t j = 0; j < VGA::WIDTH; j++) {
+            const size_t index = i * VGA::WIDTH + j;
             buffer[index] = VGA::entry(' ', color);
         }
     }
@@ -38,19 +39,19 @@ void Terminal::setColor(uint8_t newColor) {
     color = newColor;
 }
 
-void Terminal::putEntryAt(char c, uint8_t color, size_t x, size_t y) {
+void Terminal::putEntryAt(char c, uint8_t color, size_t row, size_t col) {
     switch (c) {
         // For line break we want to push col to the end so
         // it wraps over.
         case '\n':
-            col = VGA::WIDTH;
+            this->col = VGA::WIDTH;
             break;
 
         default:
-            const size_t index = y * VGA::WIDTH + x;
+            const size_t index = col * VGA::WIDTH + row;
             buffer[index] = VGA::entry(c, color);
 
-            col++;
+            this->col++;
             break;
     }
 

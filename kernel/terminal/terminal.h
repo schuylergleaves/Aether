@@ -23,6 +23,6 @@ private:
 
     void init_();
 
-    void putEntryAt(char c, uint8_t color, size_t x, size_t y);
+    void putEntryAt(char c, uint8_t color, size_t row, size_t col);
     void handleWrapping();
 };
