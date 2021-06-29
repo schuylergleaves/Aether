@@ -2,7 +2,11 @@
 
 static Terminal terminal;
 
-Terminal::Terminal() {
+void Terminal::init() {
+    terminal.init_();
+}
+
+void Terminal::init_() {
     row = 0;
     col = 0;
     color = VGA::entryColor(VGA::VGA_COLOR_GREEN, VGA::VGA_COLOR_BLACK);
@@ -14,10 +18,6 @@ Terminal::Terminal() {
             buffer[index] = VGA::entry(' ', color);
         }
     }
-}
-
-void Terminal::init() {
-    terminal = Terminal();
 }
 
 Terminal& Terminal::get() {
