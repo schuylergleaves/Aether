@@ -1,4 +1,4 @@
-#include "../libc/stdio/stdio.h"
+#include "libc/stdio/stdio.h"
 
 extern "C" void kernel_main(void){
     Terminal::init();

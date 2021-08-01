@@ -9,6 +9,7 @@ OBJ_DIR = $(BUILD_DIR)/obj
 ISO_DIR = $(BUILD_DIR)/isodir
 BOOT_DIR = $(ISO_DIR)/boot
 GRUB_DIR = $(BUILD_DIR)/isodir/boot/grub
+INCLUDE_DIR = .
 
 # add any new src/header directories here
 PROJECT_DIRS := arch/i386 core libc/stdio libc/string terminal
@@ -26,7 +27,7 @@ CPP_OBJ_WITH_OBJ_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(CPP_OBJ_WITH_SRC_DI
 	$(AC) $< -o $(OBJ_DIR)/$(@F)
 
 %.o: %.cc
-	$(CXX) -c $< -o $(OBJ_DIR)/$(@F) $(CXXFLAGS) 
+	$(CXX) -c $< -o $(OBJ_DIR)/$(@F) $(CXXFLAGS) -I$(INCLUDE_DIR)
 
 .PHONY: DIRS ISO CLEAN
 

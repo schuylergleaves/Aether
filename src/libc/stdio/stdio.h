@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stddef.h>
-#include "../string/string.h"
-#include "../../terminal/terminal.h"
+#include "libc/string/string.h"
+#include "terminal/terminal.h"
 
 #define EOF (-1)
 
