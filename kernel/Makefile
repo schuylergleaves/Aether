@@ -1,20 +1,26 @@
 AC = /opt/cross/bin/i686-elf-as
 CXX = /opt/cross/bin/i686-elf-g++
 CXXFLAGS  = -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
+ISOFLAGS = -lgcc -nostdlib
+LINKER = -T arch/i386/linker.ld
 
-OBJ_DIR = ../build/obj
+BUILD_DIR = ../build
+OBJ_DIR = $(BUILD_DIR)/obj
+ISO_DIR = $(BUILD_DIR)/isodir
+BOOT_DIR = $(ISO_DIR)/boot
+GRUB_DIR = $(BUILD_DIR)/isodir/boot/grub
 
-PROJDIRS := arch/i386 core libc/stdio libc/string terminal
+# add any new src/header directories here
+PROJECT_DIRS := arch/i386 core libc/stdio libc/string terminal
 
-SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cc")
-HDRFILES := $(shell find $(PROJDIRS) -type f -name "*.h")
-ASMFILES := $(shell find $(PROJDIRS) -type f -name "*.s")
+SRC_FILES := $(shell find $(PROJECT_DIRS) -type f -name "*.cc")
+ASM_FILES := $(shell find $(PROJECT_DIRS) -type f -name "*.s")
 
-ASM_OBJ := $(ASMFILES:.s=.o)
-CPP_OBJ := $(SRCFILES:.cc=.o)
+ASM_OBJ_WITH_SRC_DIR := $(ASM_FILES:.s=.o)
+CPP_OBJ_WITH_SRC_DIR := $(SRC_FILES:.cc=.o)
 
-ASM_OBJ_WITH_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(ASM_OBJ)))
-CPP_OBJ_WITH_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(CPP_OBJ)))
+ASM_OBJ_WITH_OBJ_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(ASM_OBJ_WITH_SRC_DIR)))
+CPP_OBJ_WITH_OBJ_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(CPP_OBJ_WITH_SRC_DIR)))
 
 %.o: %.s
 	$(AC) $< -o $(OBJ_DIR)/$(@F)
@@ -22,14 +28,19 @@ CPP_OBJ_WITH_DIR :=  $(addprefix $(OBJ_DIR)/, $(notdir $(CPP_OBJ)))
 %.o: %.cc
 	$(CXX) -c $< -o $(OBJ_DIR)/$(@F) $(CXXFLAGS) 
 
-all: dirs aether
+.PHONY: DIRS ISO CLEAN
 
-aether: $(ASM_OBJ) $(CPP_OBJ)
-	$(CXX) -T arch/i386/linker.ld -o ../build/isodir/boot/aether.bin $(ASM_OBJ_WITH_DIR) $(CPP_OBJ_WITH_DIR) -lgcc -ffreestanding -O2 -nostdlib
-	cp arch/i386/grub.cfg ../build/isodir/boot/grub/grub.cfg
-	grub-mkrescue -o ../build/aether.iso ../build/isodir/
+all: DIRS ISO
 
-dirs:
-	mkdir -p ../build/obj
-	mkdir -p ../build/isodir/boot/grub
+ISO: $(ASM_OBJ_WITH_SRC_DIR) $(CPP_OBJ_WITH_SRC_DIR)
+	$(CXX) $(LINKER) -o $(BOOT_DIR)/aether.bin $(ASM_OBJ_WITH_OBJ_DIR) $(CPP_OBJ_WITH_OBJ_DIR) $(CXXFLAGS) $(ISOFLAGS)
+	cp arch/i386/grub.cfg $(GRUB_DIR)/grub.cfg
+	grub-mkrescue -o $(BUILD_DIR)/aether.iso $(ISO_DIR)
+
+DIRS:
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(GRUB_DIR)
+
+CLEAN:
+	rm -rf $(BUILD_DIR)/*
 

@@ -2,5 +2,5 @@
 
 extern "C" void kernel_main(void){
     Terminal::init();
-    printf("Welcome to MAKEFILE Aether!\n");
+    printf("Welcome to Aether!\n");
 }
